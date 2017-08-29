@@ -42,6 +42,8 @@ class Chat {
         const message = document.createElement('span');
         message.innerHTML = payload.message;
         newMessage.appendChild(message);
+
+        this._text.scrollTop = 9999;
     }
 
     _send(event) {
