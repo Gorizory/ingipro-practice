@@ -26,10 +26,6 @@ class Chat {
     }
 
     _addMessage(payload) {
-        if(!payload._fromServer) {
-            return;
-        }
-
         const newMessage = document.createElement('div');
         newMessage.className = 'message';
         this._text.appendChild(newMessage);
