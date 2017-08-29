@@ -1,5 +1,7 @@
 .users {
-	width: 200px;
+    width: 200px;
+    flex-grow: 1;
+    height: 50%;
 }
 
 .users.hide {
@@ -7,7 +9,7 @@
 }
 
 .user {
-	padding: 12px;
+    padding: 12px;
 	font-size: 16px;
 }
 
