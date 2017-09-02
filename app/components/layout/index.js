@@ -948,12 +948,22 @@ class Layout {
             name: payload.userList[payload.userList.length - 1].name,
             color: payload.userList[payload.userList.length - 1].color,
         };
+
+        this._viewer = {
+            model: payload.model,
+            camera: payload.camera,
+            texture: payload.texture,
+        };
+
         this._layout = payload['layout'];
     }
 
     _setLayout() {
         if (!this._isEmpty(this._layout)) {
             setTimeout(this._restoreLayout.bind(this)(this._layout), 20);
+        }
+        if (!this._isEmpty(this._viewer)) {
+            mediator.emit('viewer:sync', this._viewer);
         }
     }
 
@@ -1030,11 +1040,12 @@ class Layout {
         for (let i = 0; i < payload.layout.length; i++) {
             if (!this._isEmpty(payload.layout[i])) {
 
+                // check is empty object
                 if (this._isEmpty(this._tapes[i])) {
                     this._tapes[i] = {};
                 }
 
-                if (i > 5 && !this._tapes[i].hasOwnProperty('elem')) {
+                if (i > 5 && !this._tapes[i].elem) {
                     this._tapes[i].elem = document.createElement('div');
                     if (parseInt(i, 10) % 2) {
                         this._tapes[i].elem.className = 'tape';
@@ -1051,10 +1062,10 @@ class Layout {
                     this._tapes[0].elem.appendChild(this._tapes[i].elem);
                 }
 
-                if (i === 0) {
+                if (i === 0) { // tape
                     this._tapes[i].elem.style.flexDirection = payload.layout[i].elem.flexDirection;
                 }
-                if (i > 4) {
+                if (i > 4) { // cell
                     this._tapes[i].elem.style.flexBasis = payload.layout[i].elem.flexBasis;
                     this._tapes[i].elem.style.order = payload.layout[i].elem.order;
                 }
@@ -1071,7 +1082,7 @@ class Layout {
                             this._tapes[i][parentKey] = {};
                         }
 
-                        if (parentKey > 5 && !this._tapes[i][parentKey].hasOwnProperty('elem')) {
+                        if (parentKey > 5 && !this._tapes[i][parentKey].elem) {
                             this._tapes[i][parentKey].elem = document.createElement('div');
 
                             if (parseInt(parentKey, 10) % 2) {
@@ -1102,7 +1113,7 @@ class Layout {
                         }
 
                         for (let key in payload.layout[i][parentKey]) {
-                            if (key === 'elem' || key === 'svg' || key === 'viewer' || key === 'globalId') {
+                            if (['elem', 'svg', 'viewer', 'globalId'].includes(key)) {
                                 continue;
                             }
                             this._tapes[i][parentKey][key] = payload.layout[i][parentKey][key];
