@@ -103,6 +103,8 @@ class Marks {
 
                 data.push(d3.mouse(this.svg.node()));
                 this.path.attr('d', this.line(data));
+                this._data = data.slice();
+                setTimeout(this._serializeSVG.bind(this), 20);
             })
             .on('mouseup', () => {
 
